@@ -13,29 +13,17 @@ typedef struct libmaix_disp
 {
     int width;      /* FB的宽度 */
     int height;     /* FB的高度 */
-    int swap_rb;    /* FB是否需要交换RB */
+    int bpp;     /* FB的数据格式 RGB8 RGB565 RGB888 RGB8888 */
 
     /**
-     * @brief 绘制图像
+     * @brief 绘制图像到 framebuffer ，根据 width * height * bpp 进行 memcpy
      * 
      * @param [in] disp: disp对象
-     * @param [in] buf: 图像内存地址
-     * @param [in] x: 图像左上角的x偏移
-     * @param [in] y: 图像左上角的x偏移
-     * @param [in] w: 图像的宽度
-     * @param [in] h: 图像的高度
-     * @param [in] flush: 自动刷新
+     * @param [in] buf: 自行根据系统情况准备图像内存地址，看示例代码来使用就行
      * 
      * @return 0
       */
-    libmaix_err_t (*draw)(struct libmaix_disp *disp, unsigned char *buf, int x, int y, int w, int h, int flush);
-
-    /**
-     * @brief 更新绘制的数据到屏幕
-     * 
-     * @param [in] disp: disp对象
-     */ 
-    libmaix_err_t (*flush)(struct libmaix_disp *disp);
+    libmaix_err_t (*draw)(struct libmaix_disp *disp, unsigned char *buf);
 
     void *reserved;
 }libmaix_disp_t;
@@ -45,7 +33,7 @@ typedef struct libmaix_disp
  * 
  * @return 创建的对象；NULL:出错
 */
-struct libmaix_disp * libmaix_disp_creat(void);
+struct libmaix_disp * libmaix_disp_create(void);
 
 /**
  * @brief 销毁disp对象
